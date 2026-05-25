@@ -1,0 +1,65 @@
+PROMPT PENGEMBANGAN SISTEM (SOFTWARE SPECIFICATION PROMPT)
+
+Bertindaklah sebagai Senior Full-Stack Developer dan System Architect. Saya ingin Anda membuat struktur proyek, skema basis data, API contract, dan boilerplate kode untuk sistem pelacakan truk pengangkut gas berdasarkan spesifikasi mendetail di bawah ini.
+
+---
+
+### 1. PROFIL PERUSAHAAN & IDENTITAS SISTEM
+* **Nama Perusahaan:** PT. Erickman Sarana Abadi
+* **Alamat Perusahaan:** 8 Office Park Building, 12th Floor Unit A & H, Jalan TB. Simatupang Nomor 18, Jakarta Selatan
+* **Nama Sistem:** Sistem Pelacakan Truk Pengangkut Gas Terintegrasi
+
+### 2. ARSITEKTUR TEKNOLOGI & KONFIGURASI BASIS DATA
+* **Aplikasi Mobile (Sopir):** Flutter (Dart) - Digunakan untuk pengiriman koordinat GPS secara real-time di latar belakang (background service) dan pencatatan perjalanan.
+* **Aplikasi Web (Dashboard & Backend API):** Laravel (PHP) - Berfungsi sebagai penyedia RESTful API untuk aplikasi mobile dan sebagai dashboard manajemen berbasis web.
+* **Basis Data:** MySQL
+    * **Host:** localhost
+    * **Port:** 8889
+    * **Database Name:** truck_db
+    * **Username:** root
+    * **Password:** root
+* **Peta & Geolocation:** OpenStreetMap (OSM) terintegrasi menggunakan library Leaflet.js (tanpa menggunakan Google Maps API).
+* **Fitur Tambahan:** Sistem harus mendukung fitur Export PDF untuk semua modul laporan keuangan/konsumsi bahan bakar dan riwayat perjalanan.
+
+### 3. MANAJEMEN HAK AKSES (ROLE & PERMISSIONS)
+Sistem harus mengimplementasikan Role-Based Access Control (RBAC) dengan 4 tingkatan pengguna:
+1.  **Admin:** Memiliki akses penuh (Superuser) untuk mengelola semua role, konfigurasi sistem, data master, serta mengakses semua fitur tanpa batasan.
+2.  **Operator:** Pengguna operasional harian yang bertugas mengelola data perjalanan, memantau pergerakan truk di peta secara real-time, menyetujui data pengisian bahan bakar, dan mengelola status pengiriman.
+3.  **Supir / Karyawan:** Pengguna aplikasi mobile (Flutter). Hanya dapat melakukan login, mengubah status ketersediaan, memulai/mengakhiri rute pengiriman, melihat riwayat tugas pribadi, dan mengirimkan koordinat GPS secara otomatis saat perjalanan aktif.
+4.  **Pimpinan:** Akses khusus hanya untuk melihat informasi (View-Only). Dapat memantau dashboard, melihat pergerakan truk, melihat riwayat perjalanan, serta mengunduh laporan konsumsi bahan bakar dan performa dalam format PDF, namun tidak bisa menambah, mengubah, atau menghapus data.
+
+### 4. FITUR UTAMA SISTEM YANG HARUS DISEDIAKAN
+
+#### A. Manajemen Data Sopir dan Kendaraan (CRUD)
+* Pengelolaan data lengkap sopir (Nama, NIK, Nomor Telepon, Status Aktif, Foto, Kredensial Login).
+* Pengelolaan data armada truk pengangkut gas (Nomor Plat Kendaraan, Tipe Truk, Kapasitas Muatan Gas, Status Ketersediaan, Tanggal Pajak/KIR).
+* Relasi antara Sopir dan Truk (pemasangan sopir dengan kendaraan tertentu secara dinamis atau tetap).
+
+#### B. Pencatatan Rute & Pelacakan GPS Real-Time (Aplikasi Flutter)
+* Fitur tombol "Mulai Perjalanan" dan "Selesai Perjalanan" pada aplikasi Flutter sopir.
+* Pengiriman data koordinat GPS (Latitude, Longitude, Kecepatan, dan Timestamp) dari HP sopir ke server Laravel via REST API / WebSockets secara berkala (misal: setiap 10-30 detik) saat perjalanan aktif.
+* Sistem background service pada Flutter agar pelacakan tetap berjalan meskipun aplikasi diminimize atau layar HP mati.
+
+#### C. Pencatatan Data Pemberian Bahan Bakar (BBM)
+* Form input pengisian bahan bakar untuk setiap kendaraan (melalui dashboard oleh Operator/Admin atau melalui aplikasi mobile oleh sopir dengan persetujuan Operator).
+* Data yang dicatat: Tanggal/Waktu Pengisian, Jumlah Liter (Volume), Biaya (Rupiah), Odometer Kendaraan (KM), Lokasi SPBU/Tempat Pengisian, dan Foto Struk Pembelian.
+* Perhitungan otomatis konsumsi BBM (Ratio KM per Liter) berdasarkan selisih odometer antar pengisian.
+
+#### D. Dashboard Operator Terintegrasi (Web Laravel)
+* **Live Tracking Map:** Menggunakan OpenStreetMap dan Leaflet.js untuk menampilkan peta interaktif yang menunjukkan posisi terkini seluruh truk yang sedang berjalan (berdasarkan koordinat GPS terbaru dari aplikasi Flutter). Menggunakan custom marker (ikon truk) dengan warna berbeda sesuai status (misal: Bergerak = Hijau, Berhenti = Merah, Idle = Kuning).
+* **Status Pengiriman:** Panel informasi ringkas mengenai jumlah truk yang sedang jalan, truk yang tersedia di pool, pengiriman yang sukses, dan kendala di jalan.
+* **Riwayat Perjalanan (Trip History):** Fitur untuk menampilkan kembali rute yang telah dilalui oleh truk tertentu pada tanggal tertentu di peta Leaflet.js (menggambar polyline rute perjalanan).
+* **Laporan Konsumsi Bahan Bakar:** Grafik dan tabel analisis efisiensi bahan bakar per kendaraan serta total pengeluaran operasional PT. Erickman Sarana Abadi.
+* **Eksport PDF:** Tombol cetak laporan untuk Riwayat Perjalanan dan Laporan Konsumsi Bahan Bakar ke dalam format dokumen PDF yang rapi, profesional, dan mencantumkan nama serta alamat perusahaan secara resmi.
+
+---
+
+### TUGAS ANDA:
+Berdasarkan spesifikasi di atas, harap buatkan:
+1.  **Skema Basis Data (Database Schema / Migration Laravel):** Berikan kode migrasi Laravel lengkap dengan relasi antartabel (users, roles, drivers, vehicles, trips, gps_logs, fuel_logs) yang sudah dioptimasi indeksnya untuk data GPS yang besar.
+2.  **Arsitektur API RESTful (Laravel to Flutter):** Dokumentasikan endpoint API yang dibutuhkan (Auth, Update GPS, Start/End Trip, Post Fuel).
+3.  **Implementasi Dashboard Web (Laravel + Leaflet.js):** Berikan contoh kode controller dan view Blade Laravel yang mengintegrasikan Leaflet.js untuk memuat koordinat truk secara real-time (bisa menggunakan polling API atau WebSockets).
+4.  **Struktur Aplikasi Flutter:** Berikan struktur folder proyek Flutter beserta rekomendasi state management (misal: BLoC / Provider) dan package yang tepat untuk background geolocation (`flutter_background_geolocation` atau `geolocator`).
+5.  **Sistem Export PDF (Laravel):** Berikan contoh implementasi pembuatan PDF menggunakan library seperti `barryvdh/laravel-dompdf` untuk mencetak laporan bahan bakar sesuai dengan profil perusahaan PT. Erickman Sarana Abadi.
+
+Tuliskan kode dan penjelasan ini secara terstruktur, bersih, mengikuti best-practice, serta siap untuk langsung diimplementasikan. Gunakan Bahasa Indonesia untuk penjelasannya.
