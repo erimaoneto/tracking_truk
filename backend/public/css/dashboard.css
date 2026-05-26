@@ -696,5 +696,81 @@ body {
     font-weight: 600;
 }
 
+/* ================= COLLAPSIBLE SIDEBAR LAYOUT STYLES ================= */
+.sidebar {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.main-content {
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Floating Toggle Button */
+.sidebar-toggle-btn {
+    position: fixed;
+    left: 300px; /* Aligned beautifully just to the right of the sidebar */
+    top: 20px;
+    z-index: 1001;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-sm);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, color 0.3s, transform 0.2s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.sidebar-toggle-btn:hover {
+    background: var(--bg-hover);
+    transform: scale(1.05);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* Collapsed Sidebar State Modifiers */
+body.sidebar-collapsed .sidebar {
+    transform: translateX(-280px); /* Slides the sidebar completely off-screen */
+}
+
+body.sidebar-collapsed .main-content {
+    margin-left: 0; /* Expands data content area to fill 100% width of screen */
+}
+
+body.sidebar-collapsed .sidebar-toggle-btn {
+    left: 20px; /* Smoothly floats the menu button to the very left edge of the screen */
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Responsive Overrides for Smaller Viewports */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-280px);
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .sidebar-toggle-btn {
+        left: 20px;
+    }
+    body.sidebar-collapsed .sidebar {
+        transform: translateX(0); /* On small screens, toggling will slide the sidebar in as an overlay */
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+    }
+    body.sidebar-collapsed .sidebar-toggle-btn {
+        left: 300px;
+    }
+}
+
 
 

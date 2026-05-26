@@ -87,11 +87,35 @@
 
     <!-- Main Content -->
     <main class="main-content">
+        <!-- Floating Sidebar Toggle Button -->
+        <button id="sidebarToggle" class="sidebar-toggle-btn" title="Sembunyikan/Tampilkan Menu">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
         @yield('content')
     </main>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     @stack('scripts')
+
+    <!-- Persistent Sidebar Collapse Controller -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var sidebarToggle = document.getElementById('sidebarToggle');
+            var isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+            
+            if (isCollapsed) {
+                document.body.classList.add('sidebar-collapsed');
+            }
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    var collapsed = document.body.classList.toggle('sidebar-collapsed');
+                    localStorage.setItem('sidebar-collapsed', collapsed);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
