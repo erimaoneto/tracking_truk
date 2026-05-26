@@ -101,21 +101,21 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th style="width: 5%;">No</th>
-                        <th>Tanggal</th>
-                        <th>Barang</th>
-                        <th>Sistem</th>
-                        <th>Fisik</th>
-                        <th>Selisih</th>
-                        <th>Petugas</th>
-                        <th style="width: 25%; text-align: center;">Aksi</th>
+                        <th style="width: 60px; text-align: center;">No</th>
+                        <th style="white-space: nowrap;">Tanggal</th>
+                        <th style="white-space: nowrap;">Barang</th>
+                        <th style="white-space: nowrap;">Sistem</th>
+                        <th style="white-space: nowrap;">Fisik</th>
+                        <th style="white-space: nowrap;">Selisih</th>
+                        <th style="white-space: nowrap;">Petugas</th>
+                        <th style="white-space: nowrap; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($opnames as $index => $op)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ \Carbon\Carbon::parse($op->opname_date)->format('d-m-Y') }}</td>
+                            <td style="text-align: center;">{{ $index + 1 }}</td>
+                            <td style="white-space: nowrap;">{{ \Carbon\Carbon::parse($op->opname_date)->format('d-m-Y') }}</td>
                             <td><strong>{{ $op->item->name }}</strong></td>
                             <td>{{ $op->system_stock }}</td>
                             <td>{{ $op->physical_stock }}</td>
@@ -128,9 +128,9 @@
                                     <span style="color: var(--text-secondary);">0</span>
                                 @endif
                             </td>
-                            <td>{{ $op->user->name }}</td>
+                            <td style="white-space: nowrap;">{{ $op->user->name }}</td>
                             <td style="text-align: center;">
-                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
+                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: nowrap; white-space: nowrap;">
                                     <button class="btn-primary-sm btn-detail" 
                                             data-item-name="{{ $op->item->name }}" 
                                             data-date="{{ \Carbon\Carbon::parse($op->opname_date)->format('d-m-Y H:i') }}" 

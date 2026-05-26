@@ -97,24 +97,24 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th style="width: 6%;">No</th>
-                        <th>Nama Lengkap</th>
-                        <th>Email Login</th>
-                        <th>Jabatan</th>
-                        <th style="width: 32%; text-align: center;">Aksi</th>
+                        <th style="width: 60px; text-align: center;">No</th>
+                        <th style="white-space: nowrap;">Nama Lengkap</th>
+                        <th style="white-space: nowrap;">Email Login</th>
+                        <th style="white-space: nowrap;">Jabatan</th>
+                        <th style="white-space: nowrap; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($users as $index => $user)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
+                            <td style="text-align: center;">{{ $index + 1 }}</td>
+                            <td style="white-space: nowrap;">
                                 <strong>{{ $user->name }}</strong>
                                 @if(auth()->id() == $user->id)
                                     <span style="font-size: 0.75rem; color: var(--accent-color); font-weight: bold; margin-left: 5px;">(Anda)</span>
                                 @endif
                             </td>
-                            <td>{{ $user->email }}</td>
+                            <td style="white-space: nowrap;">{{ $user->email }}</td>
                             <td>
                                 @if($user->role->name === 'Admin')
                                     <span class="badge badge-danger" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.25);">Administrator</span>
@@ -125,7 +125,7 @@
                                 @endif
                             </td>
                             <td style="text-align: center;">
-                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
+                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: nowrap; white-space: nowrap;">
                                     <button class="btn-primary-sm btn-detail" 
                                             data-name="{{ $user->name }}" 
                                             data-email="{{ $user->email }}" 

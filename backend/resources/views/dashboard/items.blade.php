@@ -92,17 +92,17 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th style="width: 8%;">No</th>
-                        <th>Nama Barang</th>
-                        <th>Kategori</th>
-                        <th>Stok Saat Ini</th>
-                        <th style="width: 30%; text-align: center;">Aksi</th>
+                        <th style="width: 60px; text-align: center;">No</th>
+                        <th style="white-space: nowrap;">Nama Barang</th>
+                        <th style="white-space: nowrap;">Kategori</th>
+                        <th style="white-space: nowrap;">Stok Saat Ini</th>
+                        <th style="white-space: nowrap; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($items as $index => $item)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td style="text-align: center;">{{ $index + 1 }}</td>
                             <td><strong>{{ $item->name }}</strong></td>
                             <td>
                                 @if($item->category === 'Gas')
@@ -117,7 +117,7 @@
                             </td>
                             <td><span style="font-size: 1.1rem; font-weight: 600;">{{ $item->current_stock }}</span> unit</td>
                             <td style="text-align: center;">
-                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
+                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: nowrap; white-space: nowrap;">
                                     <button class="btn-primary-sm btn-detail" 
                                             data-name="{{ $item->name }}" 
                                             data-category="{{ $item->category }}" 

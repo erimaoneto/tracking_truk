@@ -130,21 +130,21 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Nomor Kontrak</th>
-                        <th>Nama Klien</th>
-                        <th>Supir & Armada</th>
-                        <th>Kapasitas Sewa</th>
-                        <th>Durasi Sewa</th>
-                        <th>Sisa Kontrak</th>
-                        <th style="text-align: center;">Pengantaran</th>
-                        <th style="text-align: center;">Aksi</th>
+                        <th style="width: 60px; text-align: center;">No</th>
+                        <th style="white-space: nowrap;">Nomor Kontrak</th>
+                        <th style="white-space: nowrap;">Nama Klien</th>
+                        <th style="white-space: nowrap;">Supir & Armada</th>
+                        <th style="white-space: nowrap;">Kapasitas Sewa</th>
+                        <th style="white-space: nowrap;">Durasi Sewa</th>
+                        <th style="white-space: nowrap;">Sisa Kontrak</th>
+                        <th style="white-space: nowrap; text-align: center;">Pengantaran</th>
+                        <th style="white-space: nowrap; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($contracts as $index => $contract)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td style="text-align: center;">{{ $index + 1 }}</td>
                             <td><span class="plate-number" style="background:#f1f5f9; color:#0f172a; border: 1px solid var(--glass-border);">{{ $contract->contract_number }}</span></td>
                             <td><strong>{{ $contract->client_name }}</strong></td>
                             <td>

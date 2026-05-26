@@ -97,23 +97,23 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th style="width: 6%;">No</th>
-                        <th>Nama Supir</th>
-                        <th>Email Login</th>
-                        <th>NIK KTP</th>
-                        <th>No. Telepon</th>
-                        <th>Status</th>
-                        <th style="width: 32%; text-align: center;">Aksi</th>
+                        <th style="width: 60px; text-align: center;">No</th>
+                        <th style="white-space: nowrap;">Nama Supir</th>
+                        <th style="white-space: nowrap;">Email Login</th>
+                        <th style="white-space: nowrap;">NIK KTP</th>
+                        <th style="white-space: nowrap;">No. Telepon</th>
+                        <th style="white-space: nowrap;">Status</th>
+                        <th style="white-space: nowrap; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($drivers as $index => $driver)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td><strong>{{ $driver->user ? $driver->user->name : 'Unknown User' }}</strong></td>
-                            <td>{{ $driver->user ? $driver->user->email : '-' }}</td>
-                            <td><span style="font-family: monospace; font-size: 0.85rem;">{{ $driver->nik }}</span></td>
-                            <td>{{ $driver->phone }}</td>
+                            <td style="text-align: center;">{{ $index + 1 }}</td>
+                            <td style="white-space: nowrap;"><strong>{{ $driver->user ? $driver->user->name : 'Unknown User' }}</strong></td>
+                            <td style="white-space: nowrap;">{{ $driver->user ? $driver->user->email : '-' }}</td>
+                            <td style="white-space: nowrap;"><span style="font-family: monospace; font-size: 0.85rem;">{{ $driver->nik }}</span></td>
+                            <td style="white-space: nowrap;">{{ $driver->phone }}</td>
                             <td>
                                 @if($driver->is_active)
                                     <span class="badge badge-success">Aktif</span>
@@ -122,7 +122,7 @@
                                 @endif
                             </td>
                             <td style="text-align: center;">
-                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
+                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: nowrap; white-space: nowrap;">
                                     <button class="btn-primary-sm btn-detail" 
                                             data-name="{{ $driver->user ? $driver->user->name : 'Unknown User' }}" 
                                             data-email="{{ $driver->user ? $driver->user->email : '-' }}" 

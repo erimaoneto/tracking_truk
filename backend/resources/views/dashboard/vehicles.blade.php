@@ -131,22 +131,22 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th style="width: 6%;">No</th>
-                        <th>Plat Nomor</th>
-                        <th>Tipe</th>
-                        <th>Kapasitas</th>
-                        <th>Status</th>
-                        <th>Tanggal Pajak</th>
-                        <th style="width: 32%; text-align: center;">Aksi</th>
+                        <th style="width: 60px; text-align: center;">No</th>
+                        <th style="white-space: nowrap;">Plat Nomor</th>
+                        <th style="white-space: nowrap;">Tipe</th>
+                        <th style="white-space: nowrap;">Kapasitas</th>
+                        <th style="white-space: nowrap;">Status</th>
+                        <th style="white-space: nowrap;">Tanggal Pajak</th>
+                        <th style="white-space: nowrap; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($vehicles as $index => $vehicle)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td style="text-align: center;">{{ $index + 1 }}</td>
                             <td><span class="plate-number">{{ $vehicle->license_plate }}</span></td>
-                            <td>{{ $vehicle->type }}</td>
-                            <td>{{ $vehicle->capacity }} Kg</td>
+                            <td style="white-space: nowrap;">{{ $vehicle->type }}</td>
+                            <td style="white-space: nowrap;">{{ $vehicle->capacity }} Kg</td>
                             <td>
                                 @if($vehicle->status === 'on_trip')
                                     <span class="badge badge-success">Sedang Jalan</span>
@@ -157,7 +157,7 @@
                                 @endif
                             </td>
                             <td>
-                                <span class="tax-date {{ \Carbon\Carbon::parse($vehicle->tax_date)->isPast() ? 'tax-expired' : '' }}">
+                                <span class="tax-date {{ \Carbon\Carbon::parse($vehicle->tax_date)->isPast() ? 'tax-expired' : '' }}" style="white-space: nowrap;">
                                     {{ \Carbon\Carbon::parse($vehicle->tax_date)->format('d-m-Y') }}
                                     @if(\Carbon\Carbon::parse($vehicle->tax_date)->isPast())
                                         <span class="tax-alert" title="Pajak Lewat Tempo!">(Lewat)</span>
@@ -165,7 +165,7 @@
                                 </span>
                             </td>
                             <td style="text-align: center;">
-                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
+                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: nowrap; white-space: nowrap;">
                                     <button class="btn-primary-sm btn-detail" 
                                             data-plate="{{ $vehicle->license_plate }}" 
                                             data-type="{{ $vehicle->type }}" 
