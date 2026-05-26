@@ -47,4 +47,14 @@ class TripController extends Controller
 
         return response()->json(['status' => 'success', 'trip' => $trip]);
     }
+
+    // Mengambil daftar armada kendaraan yang siap digunakan (Tersedia) untuk aplikasi supir
+    public function getAvailableVehicles()
+    {
+        $vehicles = \App\Models\Vehicle::where('status', 'available')->get();
+        return response()->json([
+            'status' => 'success',
+            'vehicles' => $vehicles
+        ]);
+    }
 }

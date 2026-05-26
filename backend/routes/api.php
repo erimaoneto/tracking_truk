@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/trips/start', [TripController::class, 'startTrip']);
     Route::post('/trips/end/{id}', [TripController::class, 'endTrip']);
+    Route::get('/vehicles/available', [TripController::class, 'getAvailableVehicles']);
     
     Route::post('/gps/sync', [GpsLogController::class, 'sync']);
     Route::post('/fuel/report', [FuelLogController::class, 'report']);
