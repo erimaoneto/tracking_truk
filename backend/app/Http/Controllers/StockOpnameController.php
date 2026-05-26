@@ -55,6 +55,41 @@ class StockOpnameController extends Controller
 
 
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'physical_stock' => 'required|integer|min:0',
+            'notes' => 'nullable|string',
+        ]);
+
+        $opname = StockOpname::findOrFail($id);
+        $item = $opname->item;
+
+        $newPhysicalStock = $request->physical_stock;
+        $variance = $newPhysicalStock - $opname->system_stock;
+
+        $opname->update([
+            'physical_stock' => $newPhysicalStock,
+            'variance' => $variance,
+            'notes' => $request->notes,
+        ]);
+
+        // Also update the item's current stock
+        if ($item) {
+            $item->update(['current_stock' => $newPhysicalStock]);
+        }
+
+        return redirect()->route('stock-opname')->with('success', 'Stok Opname berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $opname = StockOpname::findOrFail($id);
+        $opname->delete();
+
+        return redirect()->route('stock-opname')->with('success', 'Catatan Stok Opname berhasil dihapus!');
+    }
+
     public function exportPdf()
     {
         $opnames = StockOpname::with(['item', 'user'])->orderBy('opname_date', 'desc')->get();

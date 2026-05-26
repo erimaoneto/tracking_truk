@@ -64,5 +64,7 @@ Route::middleware(['auth'])->group(function () {
     // Stok Opname
     Route::get('/stock-opname', [StockOpnameController::class, 'index'])->name('stock-opname');
     Route::post('/stock-opname', [StockOpnameController::class, 'store'])->name('stock-opname.store');
+    Route::put('/stock-opname/{id}', [StockOpnameController::class, 'update'])->name('stock-opname.update');
+    Route::delete('/stock-opname/{id}', [StockOpnameController::class, 'destroy'])->name('stock-opname.destroy');
     Route::get('/stock-opname/export-pdf', [StockOpnameController::class, 'exportPdf'])->name('stock-opname.export-pdf');
 });
