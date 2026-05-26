@@ -103,9 +103,29 @@
 
     <!-- Panel Kanan: Tabel Kontrak -->
     <div class="table-container" style="margin-bottom: 0;">
-        <div class="table-header">
+        <div class="table-header" style="border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 1rem;">
             <h3>Monitoring Kontrak Sewa Gas</h3>
         </div>
+
+        <!-- Controls: Search & Page Limit -->
+        <div class="table-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary);">Tampilkan:</label>
+                <select class="entries-select" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-primary); cursor: pointer; outline: none;">
+                    <option value="5" selected>5 data</option>
+                    <option value="10">10 data</option>
+                    <option value="25">25 data</option>
+                    <option value="50">50 data</option>
+                    <option value="-1">Semua data</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 8px; position: relative;">
+                <input type="text" class="table-search" placeholder="Cari kontrak..." style="padding: 6px 12px 6px 32px; font-size: 0.85rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-primary); outline: none; transition: all 0.2s; width: 200px;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+        </div>
+        
         <div class="table-responsive">
             <table class="premium-table">
                 <thead>
@@ -209,6 +229,60 @@
 
         // Click span triggers reset to 4 months
         autoDurationSpan.addEventListener('click', updateEndDateTo4Months);
+
+        // ================= SEARCH & PAGINATION CONTROLS =================
+        const searchInput = document.querySelector('.table-search');
+        const entriesSelect = document.querySelector('.entries-select');
+        const tableBody = document.querySelector('.premium-table tbody');
+        const originalRows = Array.from(tableBody.querySelectorAll('tr'));
+
+        function filterAndLimitTable() {
+            const query = searchInput.value.toLowerCase().trim();
+            const limit = parseInt(entriesSelect.value);
+
+            let visibleRowsCount = 0;
+            originalRows.forEach((row) => {
+                if (row.cells.length === 1 && row.cells[0].getAttribute('colspan') && !row.classList.contains('no-results-row')) {
+                    row.style.display = 'none';
+                    return;
+                }
+
+                const text = row.innerText.toLowerCase();
+                const matches = text.includes(query);
+
+                if (matches) {
+                    if (limit === -1 || visibleRowsCount < limit) {
+                        row.style.display = '';
+                        visibleRowsCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Handle "No results found"
+            let noResultsRow = tableBody.querySelector('.no-results-row');
+            if (visibleRowsCount === 0) {
+                if (!noResultsRow) {
+                    noResultsRow = document.createElement('tr');
+                    noResultsRow.className = 'no-results-row';
+                    noResultsRow.innerHTML = `<td colspan="${originalRows[0].cells.length}" style="text-align: center; color: var(--text-secondary); padding: 30px;">Tidak ada data yang cocok dengan pencarian Anda.</td>`;
+                    tableBody.appendChild(noResultsRow);
+                } else {
+                    noResultsRow.style.display = '';
+                }
+            } else if (noResultsRow) {
+                noResultsRow.style.display = 'none';
+            }
+        }
+
+        if (searchInput && entriesSelect) {
+            searchInput.addEventListener('input', filterAndLimitTable);
+            entriesSelect.addEventListener('change', filterAndLimitTable);
+            filterAndLimitTable();
+        }
     });
 </script>
 @endpush

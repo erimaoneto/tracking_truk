@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erickman Dashboard | Sistem Pelacakan Truk</title>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 </head>
