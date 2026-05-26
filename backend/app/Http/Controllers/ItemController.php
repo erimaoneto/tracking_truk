@@ -38,6 +38,24 @@ class ItemController extends Controller
         return redirect()->route('admin.items')->with('success', 'Barang baru berhasil ditambahkan ke Master Data!');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:items,name,' . $id,
+            'category' => 'required|string|max:255',
+            'current_stock' => 'required|integer|min:0',
+        ]);
+
+        $item = Item::findOrFail($id);
+        $item->update([
+            'name' => $request->name,
+            'category' => $request->category,
+            'current_stock' => $request->current_stock,
+        ]);
+
+        return redirect()->route('admin.items')->with('success', 'Barang berhasil diperbarui di Master Data!');
+    }
+
     public function destroy($id)
     {
         $item = Item::findOrFail($id);

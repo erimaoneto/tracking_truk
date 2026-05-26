@@ -34,21 +34,25 @@ Route::middleware(['auth'])->group(function () {
         // Master Barang
         Route::get('/items', [ItemController::class, 'index'])->name('admin.items');
         Route::post('/items', [ItemController::class, 'store'])->name('admin.items.store');
+        Route::put('/items/{id}', [ItemController::class, 'update'])->name('admin.items.update');
         Route::delete('/items/{id}', [ItemController::class, 'destroy'])->name('admin.items.destroy');
         
         // Master Kendaraan
         Route::get('/vehicles', [VehicleController::class, 'index'])->name('admin.vehicles');
         Route::post('/vehicles', [VehicleController::class, 'store'])->name('admin.vehicles.store');
+        Route::put('/vehicles/{id}', [VehicleController::class, 'update'])->name('admin.vehicles.update');
         Route::delete('/vehicles/{id}', [VehicleController::class, 'destroy'])->name('admin.vehicles.destroy');
         
         // Master Supir
         Route::get('/drivers', [DriverController::class, 'index'])->name('admin.drivers');
         Route::post('/drivers', [DriverController::class, 'store'])->name('admin.drivers.store');
+        Route::put('/drivers/{id}', [DriverController::class, 'update'])->name('admin.drivers.update');
         Route::delete('/drivers/{id}', [DriverController::class, 'destroy'])->name('admin.drivers.destroy');
         
         // Master Pengguna Staf Internal
         Route::get('/users', [UserController::class, 'index'])->name('admin.users');
         Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     });
     

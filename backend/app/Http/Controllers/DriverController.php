@@ -59,6 +59,48 @@ class DriverController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        $driver = Driver::findOrFail($id);
+        $userId = $driver->user_id;
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
+            'password' => 'nullable|string|min:6',
+            'nik' => 'required|string|size:16|unique:drivers,nik,' . $id,
+            'phone' => 'required|string|max:20',
+            'is_active' => 'required|in:1,0',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Update User
+            $user = $driver->user;
+            $userFields = [
+                'name' => $request->name,
+                'email' => $request->email,
+            ];
+            if ($request->filled('password')) {
+                $userFields['password'] = Hash::make($request->password);
+            }
+            $user->update($userFields);
+
+            // Update Driver
+            $driver->update([
+                'nik' => $request->nik,
+                'phone' => $request->phone,
+                'is_active' => $request->is_active == '1',
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.drivers')->with('success', 'Data supir dan akun login berhasil diperbarui!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'Gagal memperbarui data supir: ' . $e->getMessage()]);
+        }
+    }
+
     public function destroy($id)
     {
         $driver = Driver::findOrFail($id);

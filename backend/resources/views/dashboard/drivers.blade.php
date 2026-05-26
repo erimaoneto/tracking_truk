@@ -77,13 +77,13 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th style="width: 6%;">No</th>
                         <th>Nama Supir</th>
                         <th>Email Login</th>
                         <th>NIK KTP</th>
                         <th>No. Telepon</th>
                         <th>Status</th>
-                        <th style="text-align: center;">Aksi</th>
+                        <th style="width: 32%; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,14 +102,38 @@
                                 @endif
                             </td>
                             <td style="text-align: center;">
-                                <form action="{{ route('admin.drivers.destroy', $driver->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data supir ini? Ini juga akan menghapus akun login supir terkait.');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-danger-sm">
-                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        Hapus
+                                <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
+                                    <button class="btn-primary-sm btn-detail" 
+                                            data-name="{{ $driver->user ? $driver->user->name : 'Unknown User' }}" 
+                                            data-email="{{ $driver->user ? $driver->user->email : '-' }}" 
+                                            data-nik="{{ $driver->nik }}"
+                                            data-phone="{{ $driver->phone }}"
+                                            data-is-active="{{ $driver->is_active ? '1' : '0' }}"
+                                            data-created="{{ \Carbon\Carbon::parse($driver->created_at)->format('d-m-Y H:i') }}">
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                        Detail
                                     </button>
-                                </form>
+                                    
+                                    <button class="btn-warning-sm btn-edit" 
+                                            data-id="{{ $driver->id }}"
+                                            data-name="{{ $driver->user ? $driver->user->name : '' }}" 
+                                            data-email="{{ $driver->user ? $driver->user->email : '' }}" 
+                                            data-nik="{{ $driver->nik }}"
+                                            data-phone="{{ $driver->phone }}"
+                                            data-is-active="{{ $driver->is_active ? '1' : '0' }}">
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                        Edit
+                                    </button>
+                                    
+                                    <form action="{{ route('admin.drivers.destroy', $driver->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data supir ini? Ini juga akan menghapus akun login supir terkait.');" style="margin: 0;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-danger-sm">
+                                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -124,4 +148,178 @@
         </div>
     </div>
 </div>
+
+<!-- ================= MODAL DETAIL SUPIR ================= -->
+<div id="detailModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Detail Profil Supir</h3>
+            <button class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="detail-grid">
+                <div class="detail-info-box" style="grid-column: span 2;">
+                    <div class="label">Nama Lengkap</div>
+                    <div id="detail-name" class="val" style="font-size: 1.2rem; font-weight: 700; color: var(--accent-color);">-</div>
+                </div>
+                <div class="detail-info-box">
+                    <div class="label">Email Login</div>
+                    <div id="detail-email" class="val">-</div>
+                </div>
+                <div class="detail-info-box">
+                    <div class="label">NIK KTP</div>
+                    <div id="detail-nik" class="val" style="font-family: monospace; letter-spacing: 0.05em;">-</div>
+                </div>
+                <div class="detail-info-box">
+                    <div class="label">No. Telepon / WA</div>
+                    <div id="detail-phone" class="val">-</div>
+                </div>
+                <div class="detail-info-box">
+                    <div class="label">Status Akun</div>
+                    <div id="detail-status" class="val">-</div>
+                </div>
+                <div class="detail-info-box" style="grid-column: span 2;">
+                    <div class="label">Tanggal Bergabung</div>
+                    <div id="detail-created" class="val">-</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-premium btn-close-modal" style="background: var(--text-secondary); box-shadow: none;">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL EDIT SUPIR ================= -->
+<div id="editModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Ubah Informasi Supir</h3>
+            <button class="modal-close-btn">&times;</button>
+        </div>
+        <form id="editForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="edit-name">Nama Lengkap</label>
+                    <input type="text" name="name" id="edit-name" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-email">Alamat Email (Login App)</label>
+                    <input type="email" name="email" id="edit-email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-password">Kata Sandi Baru (Opsional)</label>
+                    <input type="password" name="password" id="edit-password" class="form-input" placeholder="Kosongkan jika tidak ingin mengubah sandi...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-nik">NIK KTP (16 Digit)</label>
+                    <input type="text" name="nik" id="edit-nik" class="form-input" maxlength="16" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-phone">Nomor HP / WhatsApp</label>
+                    <input type="text" name="phone" id="edit-phone" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="edit-status">Status Akun</label>
+                    <select name="is_active" id="edit-status" class="form-select" required>
+                        <option value="1">Aktif</option>
+                        <option value="0">Nonaktif</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-premium btn-close-modal" style="background: var(--text-secondary); box-shadow: none;">Batal</button>
+                <button type="submit" class="btn-premium">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Modal Selectors
+        var detailModal = document.getElementById('detailModal');
+        var editModal = document.getElementById('editModal');
+        var editForm = document.getElementById('editForm');
+
+        // Detail elements
+        var detailName = document.getElementById('detail-name');
+        var detailEmail = document.getElementById('detail-email');
+        var detailNik = document.getElementById('detail-nik');
+        var detailPhone = document.getElementById('detail-phone');
+        var detailStatus = document.getElementById('detail-status');
+        var detailCreated = document.getElementById('detail-created');
+
+        // Edit form inputs
+        var editName = document.getElementById('edit-name');
+        var editEmail = document.getElementById('edit-email');
+        var editPassword = document.getElementById('edit-password');
+        var editNik = document.getElementById('edit-nik');
+        var editPhone = document.getElementById('edit-phone');
+        var editStatus = document.getElementById('edit-status');
+
+        // Helper to Close Modals
+        function closeAllModals() {
+            detailModal.classList.remove('show');
+            editModal.classList.remove('show');
+        }
+
+        // Setup triggers for Detail
+        document.querySelectorAll('.btn-detail').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                detailName.innerText = btn.getAttribute('data-name');
+                detailEmail.innerText = btn.getAttribute('data-email');
+                detailNik.innerText = btn.getAttribute('data-nik');
+                detailPhone.innerText = btn.getAttribute('data-phone');
+                
+                var isActive = btn.getAttribute('data-is-active');
+                detailStatus.innerText = isActive === '1' ? 'Aktif' : 'Nonaktif';
+                
+                detailCreated.innerText = btn.getAttribute('data-created') + ' WIB';
+                
+                detailModal.classList.add('show');
+            });
+        });
+
+        // Setup triggers for Edit
+        document.querySelectorAll('.btn-edit').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = btn.getAttribute('data-id');
+                editName.value = btn.getAttribute('data-name');
+                editEmail.value = btn.getAttribute('data-email');
+                editPassword.value = ''; // Always clear password field on open
+                editNik.value = btn.getAttribute('data-nik');
+                editPhone.value = btn.getAttribute('data-phone');
+                editStatus.value = btn.getAttribute('data-is-active');
+                
+                // Set form action dynamically
+                editForm.setAttribute('action', `/admin/drivers/${id}`);
+                
+                editModal.classList.add('show');
+            });
+        });
+
+        // Close triggers
+        document.querySelectorAll('.modal-close-btn, .btn-close-modal').forEach(function(btn) {
+            btn.addEventListener('click', closeAllModals);
+        });
+
+        // Click outside closes modal
+        window.addEventListener('click', function(e) {
+            if (e.target === detailModal || e.target === editModal) {
+                closeAllModals();
+            }
+        });
+    });
+</script>
+@endpush

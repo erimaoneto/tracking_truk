@@ -46,6 +46,28 @@ class VehicleController extends Controller
         return redirect()->route('admin.vehicles')->with('success', 'Kendaraan baru berhasil didaftarkan ke Armada!');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'license_plate' => 'required|string|max:50|unique:vehicles,license_plate,' . $id,
+            'type' => 'required|string|max:255',
+            'capacity' => 'required|integer|min:0',
+            'status' => 'required|in:available,on_trip,maintenance',
+            'tax_date' => 'required|date',
+        ]);
+
+        $vehicle = Vehicle::findOrFail($id);
+        $vehicle->update([
+            'license_plate' => strtoupper($request->license_plate),
+            'type' => $request->type,
+            'capacity' => $request->capacity,
+            'status' => $request->status,
+            'tax_date' => $request->tax_date,
+        ]);
+
+        return redirect()->route('admin.vehicles')->with('success', 'Kendaraan berhasil diperbarui di Armada!');
+    }
+
     public function destroy($id)
     {
         $vehicle = Vehicle::findOrFail($id);
